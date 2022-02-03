@@ -53,7 +53,7 @@ idt_init(void) {
           i++;
       }
       SETGATE(idt[T_SYSCALL],0,GD_KTEXT,__vectors[T_SYSCALL],DPL_USER);    // 仅有 T_SYSCALL 为用户态
-      SETGATE(idt[T_SWITCH_TOU],1,KERNEL_CS,__vectors[T_SWITCH_TOU],DPL_USER);
+      //SETGATE(idt[T_SWITCH_TOU],1,KERNEL_CS,__vectors[T_SWITCH_TOU],DPL_USER);
       lidt(&idt_pd);   // 将idt 的地址加载到idtr中  与之相同的还有 lgdt
 }
 
@@ -171,15 +171,7 @@ trap_dispatch(struct trapframe *tf) {
         break;
     //LAB1 CHALLENGE 1 : YOUR CODE you should modify below codes.
     case T_SWITCH_TOU:
-        tf->tf_cs = USER_CS;
-        tf->tf_ds = USER_DS;
-        tf->tf_es = USER_DS;
-        tf->tf_ss = USER_DS;
-        break;
     case T_SWITCH_TOK:
-        tf->tf_cs = KERNEL_CS;
-        tf->tf_ds = KERNEL_DS;
-        tf->tf_es = KERNEL_DS;
         panic("T_SWITCH_** ??\n");
         break;
     case IRQ_OFFSET + IRQ_IDE1:
